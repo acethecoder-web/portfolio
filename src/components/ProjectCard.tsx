@@ -20,7 +20,7 @@ export function ProjectCard({ project }: { project: Project }) {
           {project.title}
         </Link>
         {project.featured && (
-          <span className="rounded-full border border-border px-2 py-0.5 font-mono text-[11px] text-text-muted">
+          <span className="rounded-full border border-gh-border px-2 py-0.5 font-mono text-[11px] text-gh-muted">
             Pinned
           </span>
         )}

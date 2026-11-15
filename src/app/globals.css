@@ -1,21 +1,44 @@
+/* src/app/globals.css */
 @import "tailwindcss";
 
 :root {
-  --bg: #0d1117;
-  --bg-subtle: #161b22;
-  --border: #30363d;
-  --text: #e6edf3;
-  --text-muted: #8b949e;
-  --accent: #2f81f7;
+  /* ===== Brand palette: Matrix-inspired ===== */
+  --bg: #020a04;
+  --bg-subtle: #061a0d;
+  --border: #0f3a1f;
+  --text: #d6ffe4;
+  --text-muted: #78b58f;
+  --accent: #00ff41;
+  --accent-fg: #00140a;
+  --glow: 0 0 18px rgb(0 255 65 / 0.5);
+  --grid: rgb(0 255 65 / 0.04);
+
+  /* ===== GitHub-style palette (Projects section ONLY) ===== */
+  --gh-bg: #0d1117;
+  --gh-subtle: #161b22;
+  --gh-border: #30363d;
+  --gh-text: #e6edf3;
+  --gh-muted: #8b949e;
+  --gh-link: #2f81f7;
 }
 
 :root[data-theme="light"] {
-  --bg: #ffffff;
-  --bg-subtle: #f6f8fa;
-  --border: #d0d7de;
-  --text: #1f2328;
-  --text-muted: #656d76;
-  --accent: #0969da;
+  --bg: #f2faf4;
+  --bg-subtle: #ffffff;
+  --border: #cfe8d6;
+  --text: #05200e;
+  --text-muted: #3f6b4f;
+  --accent: #007a24;
+  --accent-fg: #ffffff;
+  --glow: none;
+  --grid: rgb(0 122 36 / 0.06);
+
+  --gh-bg: #ffffff;
+  --gh-subtle: #f6f8fa;
+  --gh-border: #d0d7de;
+  --gh-text: #1f2328;
+  --gh-muted: #656d76;
+  --gh-link: #0969da;
 }
 
 @theme inline {
@@ -25,13 +48,56 @@
   --color-text: var(--text);
   --color-text-muted: var(--text-muted);
   --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+
+  --color-gh-bg: var(--gh-bg);
+  --color-gh-subtle: var(--gh-subtle);
+  --color-gh-border: var(--gh-border);
+  --color-gh-text: var(--gh-text);
+  --color-gh-muted: var(--gh-muted);
+  --color-gh-link: var(--gh-link);
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
 body {
-  background: var(--bg);
-  color: var(--text);
   font-family: var(--font-sans);
+  color: var(--text);
+  background-color: var(--bg);
+  /* a faint green glow at the top + a very subtle terminal grid */
+  background-image:
+    radial-gradient(40rem 22rem at 50% -8%, color-mix(in srgb, var(--accent) 14%, transparent), transparent),
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: auto, 40px 40px, 40px 40px;
+  background-repeat: no-repeat, repeat, repeat;
+}
+
+/* Small custom classes */
+.glow-text {
+  text-shadow: var(--glow);
+}
+
+.cursor-blink {
+  animation: blink 1.1s steps(1) infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .cursor-blink {
+    animation: none;
+  }
 }
