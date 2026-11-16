@@ -44,15 +44,16 @@ export async function getSiteSettings(): Promise<SiteSettings> {
   return data;
 }
 
-export async function getSections(): Promise<Section[]> {
+export const getSections = cache(async (): Promise<Section[]> => {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("sections")
     .select("id, key, title, body, position")
+    .eq("is_visible", true)
     .order("position");
   if (error) throw new Error(`sections: ${error.message}`);
   return data ?? [];
-}
+});
 
 type ProjectRow = {
   slug: string;
@@ -96,6 +97,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
   const { data, error } = await supabase
     .from("testimonials")
     .select("id, name, role, company, company_logo_url, quote")
+    .eq("is_visible", true)
     .is("archived_at", null)
     .order("position");
   if (error) throw new Error(`testimonials: ${error.message}`);
@@ -107,6 +109,7 @@ export async function getPartners(): Promise<Partner[]> {
   const { data, error } = await supabase
     .from("partners")
     .select("id, name, logo_url, website_url")
+    .eq("is_visible", true)
     .is("archived_at", null)
     .order("position");
   if (error) throw new Error(`partners: ${error.message}`);
@@ -140,7 +143,9 @@ export const getProject = cache(
       .select(
         "slug, title, description, content, cover_image_url, repo_url, live_url, project_tags(tags(name, color, archived_at)), project_images(id, image_url, alt_text)"
       )
+      .eq("is_published", true)
       .eq("slug", slug)
+      .eq("is_published", true)
       .is("archived_at", null)
       .order("position", { referencedTable: "project_images" })
       .maybeSingle();

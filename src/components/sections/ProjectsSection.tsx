@@ -15,6 +15,9 @@ export function ProjectsSection({
         <h2 className="font-mono text-sm text-gh-muted">
           // {section.title.toLowerCase()}
         </h2>
+        {section.body && (
+  <p className="mt-1 text-sm text-gh-muted">{section.body}</p>
+)}
         {projects.length === 0 ? (
           <p className="mt-4 text-sm text-gh-muted">No projects yet.</p>
         ) : (

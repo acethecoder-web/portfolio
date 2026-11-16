@@ -1,7 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { UUID_RE } from "@/lib/validation";
 
-
 export type AdminProjectRow = {
   id: string;
   slug: string;
@@ -142,3 +141,37 @@ const TAG_COLS = "id, name, color, archived_at";
 export const getAdminTags = (archived = false) =>
   listRows<AdminTagFull>("tags", TAG_COLS, archived, "name");
 export const getAdminTag = (id: string) => getRow<AdminTagFull>("tags", id, TAG_COLS);
+
+export type AdminSection = {
+  id: string;
+  key: string;
+  title: string;
+  body: string | null;
+  position: number;
+  is_visible: boolean;
+};
+
+const SECTION_COLS = "id, key, title, body, position, is_visible";
+
+export async function getAdminSections(): Promise<AdminSection[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("sections")
+    .select(SECTION_COLS)
+    .order("position")
+    .order("id");
+  if (error) throw new Error(`sections: ${error.message}`);
+  return (data ?? []) as unknown as AdminSection[];
+}
+
+export async function getAdminSection(id: string): Promise<AdminSection | null> {
+  if (!UUID_RE.test(id)) return null;
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("sections")
+    .select(SECTION_COLS)
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw new Error(`section: ${error.message}`);
+  return (data as unknown as AdminSection) ?? null;
+}

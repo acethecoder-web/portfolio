@@ -1,4 +1,3 @@
-// src/components/sections/PartnersSection.tsx
 import type { Partner, Section } from "@/lib/data";
 import { SectionHeading } from "./SectionHeading";
 
@@ -13,8 +12,8 @@ export function PartnersSection({
 
   return (
     <section id="partners">
-      <SectionHeading title={section.title} />
-      <ul className="mt-4 flex flex-wrap gap-3">
+<SectionHeading title={section.title} intro={section.body} />      
+<ul className="mt-4 flex flex-wrap gap-3">
         {partners.map((p) => (
           <li key={p.id}>
             {p.website_url ? (

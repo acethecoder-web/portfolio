@@ -14,8 +14,8 @@ export function TestimonialsSection({
 
   return (
     <section id="testimonials">
-      <SectionHeading title={section.title} eyebrow={section.key} />
-      <div className="mt-6 grid gap-5 sm:grid-cols-2">
+<SectionHeading title={section.title} intro={section.body} />     
+<div className="mt-6 grid gap-5 sm:grid-cols-2">
         {testimonials.map((t) => {
           const brand = t.company ?? t.name;
           const color = colorFor(brand);
