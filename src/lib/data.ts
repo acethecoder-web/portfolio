@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/server";
 import type { Project } from "@/components/ProjectCard";
+import { cache } from "react";
 
 export type SiteSettings = {
   site_name: string;
@@ -104,3 +105,53 @@ export async function getPartners(): Promise<Partner[]> {
   if (error) throw new Error(`partners: ${error.message}`);
   return data ?? [];
 }
+
+export type ProjectDetail = {
+  slug: string;
+  title: string;
+  description: string;
+  content: string | null;
+  cover_image_url: string | null;
+  repo_url: string | null;
+  live_url: string | null;
+  tags: { label: string; color: string }[];
+  images: { id: string; image_url: string; alt_text: string | null }[];
+};
+
+type ProjectDetailRow = Omit<ProjectDetail, "tags" | "images"> & {
+  project_tags: { tags: { name: string; color: string } }[];
+  project_images: { id: string; image_url: string; alt_text: string | null }[];
+};
+
+export const getProject = cache(
+  async (slug: string): Promise<ProjectDetail | null> => {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("projects")
+      .select(
+        "slug, title, description, content, cover_image_url, repo_url, live_url, project_tags(tags(name, color)), project_images(id, image_url, alt_text)"
+      )
+      .eq("slug", slug)
+      .order("position", { referencedTable: "project_images" })
+      .maybeSingle();
+
+    if (error) throw new Error(`project: ${error.message}`);
+    if (!data) return null;
+
+    const row = data as unknown as ProjectDetailRow;
+    return {
+      slug: row.slug,
+      title: row.title,
+      description: row.description,
+      content: row.content,
+      cover_image_url: row.cover_image_url,
+      repo_url: row.repo_url,
+      live_url: row.live_url,
+      tags: row.project_tags.map((pt) => ({
+        label: pt.tags.name,
+        color: pt.tags.color,
+      })),
+      images: row.project_images,
+    };
+  }
+);

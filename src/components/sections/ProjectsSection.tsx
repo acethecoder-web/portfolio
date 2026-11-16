@@ -1,6 +1,6 @@
-// src/components/sections/ProjectsSection.tsx
 import { ProjectCard, type Project } from "@/components/ProjectCard";
 import type { Section } from "@/lib/data";
+import Link from "next/link";
 
 export function ProjectsSection({
   section,
@@ -18,11 +18,19 @@ export function ProjectsSection({
         {projects.length === 0 ? (
           <p className="mt-4 text-sm text-gh-muted">No projects yet.</p>
         ) : (
+            <>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project) => (
-              <ProjectCard key={project.slug} project={project} />
-            ))}
+             {projects.slice(0, 6).map((project) => (
+                <ProjectCard key={project.slug} project={project} />
+              ))}
           </div>
+           <Link
+              href="/projects"
+              className="mt-5 inline-block text-sm text-gh-link hover:underline"
+            >
+              View all projects →
+            </Link>
+          </>
         )}
       </div>
     </section>

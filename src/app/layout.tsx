@@ -7,8 +7,8 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ACES",
-  description: "Projects and work by Aces S. Hapiz",
+  title: { default: "ACES | Portfolio", template: "%s | Your Name" },
+  description: "Projects and work by ACES",
 };
 
 const themeScript = `
