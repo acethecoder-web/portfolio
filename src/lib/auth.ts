@@ -1,6 +1,6 @@
 import { cache } from "react";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/server";
+import { createClient } from "@/lib/supabase/server";
 
 export const requireAdmin = cache(async () => {
   const supabase = await createClient();

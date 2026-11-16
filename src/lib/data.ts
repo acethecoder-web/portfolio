@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/server";
+import { createClient } from "@/lib/supabase/server";
 import type { Project } from "@/components/ProjectCard";
 import { cache } from "react";
 
@@ -59,16 +59,20 @@ type ProjectRow = {
   title: string;
   description: string;
   is_featured: boolean;
-  project_tags: { tags: { name: string; color: string } }[];
+  project_tags: {
+    tags: { name: string; color: string; archived_at: string | null } | null;
+  }[];
 };
+
 
 export async function getProjects(): Promise<Project[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("projects")
     .select(
-      "slug, title, description, is_featured, project_tags(tags(name, color))"
+      "slug, title, description, is_featured, project_tags(tags(name, color, archived_at))"
     )
+    .is("archived_at", null)
     .order("is_featured", { ascending: false })
     .order("position");
   if (error) throw new Error(`projects: ${error.message}`);
@@ -79,10 +83,11 @@ export async function getProjects(): Promise<Project[]> {
     title: row.title,
     description: row.description,
     featured: row.is_featured,
-    tags: row.project_tags.map((pt) => ({
-      label: pt.tags.name,
-      color: pt.tags.color,
-    })),
+    tags: row.project_tags.flatMap((pt) =>
+      pt.tags && !pt.tags.archived_at
+        ? [{ label: pt.tags.name, color: pt.tags.color }]
+        : []
+    ),
   }));
 }
 
@@ -91,6 +96,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
   const { data, error } = await supabase
     .from("testimonials")
     .select("id, name, role, company, company_logo_url, quote")
+    .is("archived_at", null)
     .order("position");
   if (error) throw new Error(`testimonials: ${error.message}`);
   return data ?? [];
@@ -101,6 +107,7 @@ export async function getPartners(): Promise<Partner[]> {
   const { data, error } = await supabase
     .from("partners")
     .select("id, name, logo_url, website_url")
+    .is("archived_at", null)
     .order("position");
   if (error) throw new Error(`partners: ${error.message}`);
   return data ?? [];
@@ -114,12 +121,14 @@ export type ProjectDetail = {
   cover_image_url: string | null;
   repo_url: string | null;
   live_url: string | null;
-  tags: { label: string; color: string }[];
+tags: { label: string; color: string }[];
   images: { id: string; image_url: string; alt_text: string | null }[];
 };
 
 type ProjectDetailRow = Omit<ProjectDetail, "tags" | "images"> & {
-  project_tags: { tags: { name: string; color: string } }[];
+  project_tags: {
+    tags: { name: string; color: string; archived_at: string | null } | null;
+  }[];
   project_images: { id: string; image_url: string; alt_text: string | null }[];
 };
 
@@ -129,9 +138,10 @@ export const getProject = cache(
     const { data, error } = await supabase
       .from("projects")
       .select(
-        "slug, title, description, content, cover_image_url, repo_url, live_url, project_tags(tags(name, color)), project_images(id, image_url, alt_text)"
+        "slug, title, description, content, cover_image_url, repo_url, live_url, project_tags(tags(name, color, archived_at)), project_images(id, image_url, alt_text)"
       )
       .eq("slug", slug)
+      .is("archived_at", null)
       .order("position", { referencedTable: "project_images" })
       .maybeSingle();
 
@@ -147,10 +157,11 @@ export const getProject = cache(
       cover_image_url: row.cover_image_url,
       repo_url: row.repo_url,
       live_url: row.live_url,
-      tags: row.project_tags.map((pt) => ({
-        label: pt.tags.name,
-        color: pt.tags.color,
-      })),
+      tags: row.project_tags.flatMap((pt) =>
+        pt.tags && !pt.tags.archived_at
+          ? [{ label: pt.tags.name, color: pt.tags.color }]
+          : []
+      ),
       images: row.project_images,
     };
   }

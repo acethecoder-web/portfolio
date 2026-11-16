@@ -1,10 +1,11 @@
 import { requireAdmin } from "@/lib/auth";
-import { createClient } from "@/lib/server";
+import { createClient } from "@/lib/supabase/server";
 
 async function countRows(table: string, unreadOnly = false) {
   const supabase = await createClient();
   let query = supabase.from(table).select("*", { count: "exact", head: true });
   if (unreadOnly) query = query.eq("is_read", false);
+  query = query.is("archived_at", null); query = query.is("archived_at", null);
   const { count } = await query;
   return count ?? 0;
 }
