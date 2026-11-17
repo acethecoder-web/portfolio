@@ -114,6 +114,9 @@ export default async function AdminProjectsPage({ searchParams }: Props) {
                           <Link href={`/admin/projects/${p.id}/edit`} className="hover:text-accent">
                             Edit
                           </Link>
+                          <Link href={`/admin/projects/${p.id}/gallery`} className="hover:text-accent">
+  Snapshots
+</Link>
                           <form action={archiveProject.bind(null, p.id)}>
                             <ConfirmButton
                               message={`Archive "${p.title}"? It will be hidden from your site. You can restore it later.`}

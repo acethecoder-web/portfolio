@@ -8,6 +8,7 @@ export type SiteSettings = {
   bio: string | null;
   accent_color: string;
   social_links: Record<string, string>;
+  avatar_url: string | null;
 };
 
 export type Section = {
@@ -38,7 +39,7 @@ export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("site_settings")
-    .select("site_name, tagline, bio, accent_color, social_links")
+    .select("site_name, tagline, bio, accent_color, avatar_url, social_links")
     .eq("id", 1)
     .single();
   if (error) throw new Error(`site_settings: ${error.message}`);
@@ -133,8 +134,7 @@ type ProjectDetailRow = Omit<ProjectDetail, "tags" | "images"> & {
   project_tags: {
     tags: { name: string; color: string; archived_at: string | null } | null;
   }[];
-  project_images: { id: string; image_url: string; alt_text: string | null }[];
-};
+project_images: { id: string; image_url: string; alt_text: string | null; archived_at: string | null }[];};
 
 export const getProject = cache(
   async (slug: string): Promise<ProjectDetail | null> => {
@@ -142,7 +142,7 @@ export const getProject = cache(
     const { data, error } = await supabase
       .from("projects")
       .select(
-        "slug, title, description, content, cover_image_url, repo_url, live_url, project_tags(tags(name, color, archived_at)), project_images(id, image_url, alt_text)"
+        "slug, title, description, content, cover_image_url, repo_url, live_url, project_tags(tags(name, color, archived_at)), project_images(id, image_url, alt_text, archived_at))"
       )
       .eq("is_published", true)
       .eq("slug", slug)
@@ -168,7 +168,8 @@ export const getProject = cache(
           ? [{ label: pt.tags.name, color: pt.tags.color }]
           : []
       ),
-      images: row.project_images,
-    };
+images: row.project_images
+  .filter((img) => !img.archived_at)
+  .map(({ id, image_url, alt_text }) => ({ id, image_url, alt_text })),    };
   }
 );

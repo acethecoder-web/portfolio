@@ -175,3 +175,34 @@ export async function getAdminSection(id: string): Promise<AdminSection | null> 
   if (error) throw new Error(`section: ${error.message}`);
   return (data as unknown as AdminSection) ?? null;
 }
+
+// ---------- project snapshots ----------
+export type AdminGalleryImage = {
+  id: string;
+  project_id: string;
+  image_url: string;
+  alt_text: string | null;
+  position: number;
+  archived_at: string | null;
+};
+
+export async function getAdminGallery(
+  projectId: string,
+  archived = false
+): Promise<AdminGalleryImage[]> {
+  if (!UUID_RE.test(projectId)) return [];
+
+  const supabase = await createClient();
+  let query = supabase
+    .from("project_images")
+    .select("id, project_id, image_url, alt_text, position, archived_at")
+    .eq("project_id", projectId);
+
+  query = archived
+    ? query.not("archived_at", "is", null)
+    : query.is("archived_at", null);
+
+  const { data, error } = await query.order("position").order("id");
+  if (error) throw new Error(`project_images: ${error.message}`);
+  return (data ?? []) as unknown as AdminGalleryImage[];
+}

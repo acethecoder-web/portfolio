@@ -6,6 +6,9 @@ import { Markdown } from "@/components/Markdown";
 import { Tag } from "@/components/Tag";
 import { getProject } from "@/lib/data";
 import { safeUrl } from "@/lib/url";
+import { CloudImage } from "@/components/CloudImage";
+import { isStorageUrl } from "@/lib/storage";
+import { ProjectGallery } from "@/components/ProjectGallery";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -74,38 +77,24 @@ export default async function ProjectPage({ params }: Props) {
         </div>
 
         <div className="p-5 sm:p-8">
-          {project.cover_image_url && (
-            <img
-              src={project.cover_image_url}
-              alt={`${project.title} cover`}
-              className="mb-6 w-full rounded-md border border-border"
-            />
-          )}
+          {isStorageUrl(project.cover_image_url) && (
+  <div className="relative mb-6 aspect-video w-full overflow-hidden rounded-md border border-border">
+    <CloudImage
+      src={project.cover_image_url}
+      alt={`${project.title} cover`}
+      fill
+      sizes="(min-width: 1024px) 960px, 100vw"
+      className="object-cover"
+    />
+  </div>
+)}
 
           {project.content ? (
             <Markdown>{project.content}</Markdown>
           ) : (
             <p className="text-sm text-text-muted">No README for this project yet.</p>
           )}
-
-          {project.images.length > 0 && (
-            <div className="mt-8">
-              <h2 className="mb-3 border-b border-border pb-2 text-xl font-semibold">
-                Gallery
-              </h2>
-              <div className="grid gap-4 sm:grid-cols-2">
-                {project.images.map((img) => (
-                  <img
-                    key={img.id}
-                    src={img.image_url}
-                    alt={img.alt_text ?? `${project.title} screenshot`}
-                    loading="lazy"
-                    className="w-full rounded-md border border-border"
-                  />
-                ))}
-              </div>
-            </div>
-          )}
+          <ProjectGallery images={project.images} title={project.title} />
         </div>
       </article>
     </Container>

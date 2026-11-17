@@ -1,4 +1,7 @@
 // src/components/LogoBadge.tsx
+import { CloudImage } from "@/components/CloudImage";
+import { isStorageUrl } from "@/lib/storage";
+
 export function LogoBadge({
   name,
   src,
@@ -12,13 +15,13 @@ export function LogoBadge({
 }) {
   const box = { width: size, height: size };
 
-  if (src) {
+  if (isStorageUrl(src)) {
     return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
+      <CloudImage
         src={src}
         alt={`${name} logo`}
-        loading="lazy"
+        width={size}
+        height={size}
         style={box}
         className="rounded-lg bg-white object-contain p-1.5"
       />
@@ -29,7 +32,7 @@ export function LogoBadge({
     <span
       aria-hidden
       style={{ ...box, backgroundColor: color }}
-      className="flex items-center justify-center rounded-lg text-lg font-bold text-white"
+      className="flex items-center justify-center rounded-lg text-lg font-bold text-black"
     >
       {name.charAt(0).toUpperCase()}
     </span>

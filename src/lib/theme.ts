@@ -12,14 +12,16 @@ function readableOn(rgb: number[]): string {
   return luminance(rgb) > 0.3 ? "#00140a" : "#ffffff";
 }
 
+const LIGHT_MIX = 78;
+
 export function accentCss(hex: string | null | undefined): string {
   if (!hex || !HEX_COLOR_RE.test(hex)) return ""; 
 
   const rgb = [1, 3, 5].map((i) => Number.parseInt(hex.slice(i, i + 2), 16));
-  const lightRgb = rgb.map((c) => Math.round(c * 0.45)); 
+  const lightRgb = rgb.map((c) => Math.round((c * LIGHT_MIX) / 100));
 
   return (
     `html:root{--accent:${hex};--accent-fg:${readableOn(rgb)};}` +
-    `html:root[data-theme="light"]{--accent:color-mix(in srgb,${hex} 45%,black);--accent-fg:${readableOn(lightRgb)};}`
+    `html:root[data-theme=light]{--accent:color-mix(in srgb,${hex} ${LIGHT_MIX}%,black);--accent-fg:${readableOn(lightRgb)};}`
   );
 }

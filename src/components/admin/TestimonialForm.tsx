@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import type { AdminTestimonial } from "@/lib/admin-data";
 import type { FormState } from "@/lib/validation";
 import { Field, FormActions, FormError, formValues, inputClass } from "./fields";
+import { ImageUploadField } from "./ImageUploadField";
 
 export function TestimonialForm({
   action,
@@ -37,11 +38,14 @@ export function TestimonialForm({
         </Field>
       </div>
 
-      <Field label="Company logo URL" htmlFor="company_logo_url"
-        hint="Paste an https image link for now. Uploads arrive in Phase 10. Leave blank to show a letter badge.">
-        <input id="company_logo_url" name="company_logo_url" type="url"
-          defaultValue={text("company_logo_url", item?.company_logo_url ?? "")} className={inputClass} />
-      </Field>
+      <ImageUploadField
+  name="company_logo_url"
+  label="Company logo"
+  folder="logos"
+  maxSize={512}
+  defaultValue={text("company_logo_url", item?.company_logo_url ?? "")}
+  hint="Leave empty to show a letter badge."
+/>
 
       <Field label="Quote" htmlFor="quote" hint="Max 1,000 characters.">
         <textarea id="quote" name="quote" required rows={5} maxLength={1000}

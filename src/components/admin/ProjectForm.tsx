@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useActionState } from "react";
 import type { AdminProject, AdminTag } from "@/lib/admin-data";
 import type { FormState } from "@/lib/validation";
+import { ImageUploadField } from "./ImageUploadField";
 
 const inputClass =
   "mt-1 w-full rounded-md border border-border bg-bg px-3 py-2 text-sm outline-none focus:border-accent";
@@ -109,15 +110,14 @@ export function ProjectForm({
         />
       </Field>
 
-      <Field label="Cover image URL" htmlFor="cover_image_url" hint="Paste an https image link for now. Uploads arrive in Phase 10.">
-        <input
-          id="cover_image_url"
-          name="cover_image_url"
-          type="url"
-          defaultValue={text("cover_image_url", project?.cover_image_url ?? "")}
-          className={inputClass}
-        />
-      </Field>
+     <ImageUploadField
+  name="cover_image_url"
+  label="Cover image"
+  folder="covers"
+  maxSize={1600}
+  defaultValue={text("cover_image_url", project?.cover_image_url ?? "")}
+  hint="PNG, JPEG, or WebP. Shown at the top of the project page."
+/>
 
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Source code URL" htmlFor="repo_url">

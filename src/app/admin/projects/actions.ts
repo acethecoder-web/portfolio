@@ -13,6 +13,7 @@ import {
   type FormState,
 } from "@/lib/validation";
 import { archiveRow, deleteArchivedRow, restoreRow } from "@/lib/archive";
+import { isStorageUrl } from "@/lib/storage";
 
 function fail(error: string, formData: FormData): FormState {
   return {
@@ -39,8 +40,7 @@ function parseProjectForm(formData: FormData) {
   if (!SLUG_RE.test(slug) || slug.length > 80)
     return { error: "Slug may only contain lowercase letters, numbers, and single hyphens." };
   if (content.length > 50000) return { error: "README is too long (max 50,000 characters)." };
-  if (cover && !isHttpUrl(cover)) return { error: "Cover image must be an http(s) link." };
-  if (repo && !isHttpUrl(repo)) return { error: "Source code link must be an http(s) link." };
+if (cover && !isStorageUrl(cover)) return { error: "Cover image must be uploaded with the uploader." };  if (repo && !isHttpUrl(repo)) return { error: "Source code link must be an http(s) link." };
   if (live && !isHttpUrl(live)) return { error: "Live demo link must be an http(s) link." };
   if (!Number.isInteger(position) || position < 0 || position > 9999)
     return { error: "Position must be a whole number between 0 and 9999." };

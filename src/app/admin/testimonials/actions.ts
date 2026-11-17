@@ -12,6 +12,7 @@ import {
   readText,
   type FormState,
 } from "@/lib/validation";
+import { isStorageUrl } from "@/lib/storage";
 
 function parse(formData: FormData) {
   const name = readText(formData, "name");
@@ -25,7 +26,7 @@ function parse(formData: FormData) {
   if (role.length > 100) return { error: "Role is too long (max 100 characters)." };
   if (company.length > 100) return { error: "Company is too long (max 100 characters)." };
   if (!quote || quote.length > 1000) return { error: "Quote is required (max 1,000 characters)." };
-  if (logo && !isHttpUrl(logo)) return { error: "Logo must be an http(s) link." };
+  if (logo && !isStorageUrl(logo)) return { error: "Logo must be uploaded with the uploader." };
   if (position === null) return { error: "Position must be a whole number between 0 and 9999." };
 
   return {

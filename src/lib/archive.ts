@@ -4,8 +4,12 @@ import { createClient } from "@/lib/supabase/server";
 import { UUID_RE } from "@/lib/validation";
 
 
-export type ArchivableTable = "projects" | "testimonials" | "partners" | "tags";
-
+export type ArchivableTable =
+  | "projects"
+  | "testimonials"
+  | "partners"
+  | "tags"
+  | "project_images";
 export function refreshSite() {
   revalidatePath("/", "layout");
 }

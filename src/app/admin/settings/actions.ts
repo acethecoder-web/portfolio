@@ -12,6 +12,7 @@ import {
   readText,
   type FormState,
 } from "@/lib/validation";
+import { isStorageUrl } from "@/lib/storage";
 
 export async function updateSettings(
   _prev: FormState,
@@ -22,6 +23,7 @@ export async function updateSettings(
   const site_name = readText(formData, "site_name");
   const tagline = readText(formData, "tagline");
   const accent_color = readText(formData, "accent_color");
+  const avatar_url = readText(formData, "avatar_url");
 
   if (!site_name || site_name.length > 80)
     return fail("Site name is required (max 80 characters).", formData);
@@ -29,6 +31,8 @@ export async function updateSettings(
     return fail("Tagline is too long (max 200 characters).", formData);
   if (!HEX_COLOR_RE.test(accent_color))
     return fail("Pick a valid accent color.", formData);
+  if (avatar_url && !isStorageUrl(avatar_url))
+  return fail("Profile photo must be uploaded with the uploader.", formData);
 
   const social_links: Record<string, string> = {};
   for (const field of SOCIAL_FIELDS) {
@@ -46,8 +50,7 @@ export async function updateSettings(
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("site_settings")
-    .update({ site_name, tagline, accent_color, social_links })
-    .eq("id", 1)
+.update({ site_name, tagline, accent_color, avatar_url: avatar_url || null, social_links })    .eq("id", 1)
     .select("id");
   if (error) return fail(`Could not save: ${error.message}`, formData);
   if (!data || data.length === 0)

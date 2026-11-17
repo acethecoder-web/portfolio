@@ -5,6 +5,7 @@ import type { SiteSettings } from "@/lib/data";
 import { SOCIAL_FIELDS } from "@/lib/social";
 import type { FormState } from "@/lib/validation";
 import { Field, FormActions, FormError, formValues, inputClass } from "./fields";
+import { ImageUploadField } from "./ImageUploadField";
 
 export function SettingsForm({
   action,
@@ -29,6 +30,15 @@ export function SettingsForm({
         <textarea id="tagline" name="tagline" rows={2} maxLength={200}
           defaultValue={text("tagline", settings.tagline)} className={inputClass} />
       </Field>
+      
+      <ImageUploadField
+  name="avatar_url"
+  label="Profile photo"
+  folder="avatars"
+  maxSize={800}
+  defaultValue={text("avatar_url", settings.avatar_url ?? "")}
+  hint="Shown next to your name in the Hero."
+/>
 
       <Field label="Accent color" htmlFor="accent_color"
         hint="Buttons, links, and highlights. Light mode automatically uses a darker version. Default: #00ff41.">

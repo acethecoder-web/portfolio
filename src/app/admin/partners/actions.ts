@@ -12,6 +12,7 @@ import {
   readText,
   type FormState,
 } from "@/lib/validation";
+import { isStorageUrl } from "@/lib/storage";
 
 function parse(formData: FormData) {
   const name = readText(formData, "name");
@@ -20,8 +21,7 @@ function parse(formData: FormData) {
   const position = readPosition(formData);
 
   if (!name || name.length > 100) return { error: "Name is required (max 100 characters)." };
-  if (logo && !isHttpUrl(logo)) return { error: "Logo must be an http(s) link." };
-  if (website && !isHttpUrl(website)) return { error: "Website must be an http(s) link." };
+if (logo && !isStorageUrl(logo)) return { error: "Logo must be uploaded with the uploader." };  if (website && !isHttpUrl(website)) return { error: "Website must be an http(s) link." };
   if (position === null) return { error: "Position must be a whole number between 0 and 9999." };
 
   return {
