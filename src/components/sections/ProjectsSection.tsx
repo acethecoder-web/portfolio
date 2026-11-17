@@ -29,7 +29,7 @@ export function ProjectsSection({
           </div>
            <Link
               href="/projects"
-              className="mt-5 inline-block text-sm text-gh-link hover:underline"
+              className="mt-5 inline-block text-sm hover:underline text-accent"
             >
               View all projects →
             </Link>

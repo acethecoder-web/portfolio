@@ -1,12 +1,13 @@
-import { Header } from "@/components/Header";
+// src/app/(site)/layout.tsx
 import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <div className="flex min-h-dvh flex-col">
       <Header />
-      {children}
+      <main className="flex-1">{children}</main>
       <Footer />
-    </>
+    </div>
   );
 }

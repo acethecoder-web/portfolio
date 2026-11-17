@@ -1,4 +1,3 @@
-// src/app/projects/[slug]/page.tsx
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -31,10 +30,10 @@ export default async function ProjectPage({ params }: Props) {
         ← all projects
       </Link>
 
-      <article className="mt-6 overflow-hidden rounded-xl border border-gh-border bg-gh-bg text-gh-text">
-        <header className="border-b border-gh-border p-5 sm:p-6">
+      <article className="mt-6 overflow-hidden rounded-xl border border-border bg-bg-subtle">
+        <header className="border-b border-border p-5 sm:p-6">
           <h1 className="text-2xl font-semibold">{project.title}</h1>
-          <p className="mt-2 text-gh-muted">{project.description}</p>
+          <p className="mt-2 text-text-muted">{project.description}</p>
 
           {project.tags.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1">
@@ -51,7 +50,7 @@ export default async function ProjectPage({ params }: Props) {
                   href={liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-md bg-gh-link px-4 py-1.5 text-sm font-semibold text-white hover:brightness-110"
+                  className="rounded-md bg-accent px-4 py-1.5 text-sm font-semibold text-accent-fg hover:brightness-110"
                 >
                   Live demo
                 </a>
@@ -61,7 +60,7 @@ export default async function ProjectPage({ params }: Props) {
                   href={repoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-md border border-gh-border px-4 py-1.5 text-sm font-semibold hover:bg-gh-subtle"
+                  className="rounded-md border border-border px-4 py-1.5 text-sm font-semibold hover:border-accent hover:text-accent"
                 >
                   Source code
                 </a>
@@ -70,7 +69,7 @@ export default async function ProjectPage({ params }: Props) {
           )}
         </header>
 
-        <div className="border-b border-gh-border bg-gh-subtle px-5 py-2 font-mono text-xs text-gh-muted sm:px-6">
+        <div className="border-b border-border bg-bg px-5 py-2 font-mono text-xs text-text-muted sm:px-6">
           README.md
         </div>
 
@@ -79,19 +78,19 @@ export default async function ProjectPage({ params }: Props) {
             <img
               src={project.cover_image_url}
               alt={`${project.title} cover`}
-              className="mb-6 w-full rounded-md border border-gh-border"
+              className="mb-6 w-full rounded-md border border-border"
             />
           )}
 
           {project.content ? (
             <Markdown>{project.content}</Markdown>
           ) : (
-            <p className="text-sm text-gh-muted">No README for this project yet.</p>
+            <p className="text-sm text-text-muted">No README for this project yet.</p>
           )}
 
           {project.images.length > 0 && (
             <div className="mt-8">
-              <h2 className="mb-3 border-b border-gh-border pb-2 text-xl font-semibold">
+              <h2 className="mb-3 border-b border-border pb-2 text-xl font-semibold">
                 Gallery
               </h2>
               <div className="grid gap-4 sm:grid-cols-2">
@@ -101,7 +100,7 @@ export default async function ProjectPage({ params }: Props) {
                     src={img.image_url}
                     alt={img.alt_text ?? `${project.title} screenshot`}
                     loading="lazy"
-                    className="w-full rounded-md border border-gh-border"
+                    className="w-full rounded-md border border-border"
                   />
                 ))}
               </div>
