@@ -1,14 +1,27 @@
+// src/app/layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { getSiteSettings } from "@/lib/data";
+import { accentCss } from "@/lib/theme";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: { default: "ACES | Portfolio", template: "%s | Your Name" },
-  description: "Projects and work by ACES",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  let name = "Your Name";
+  let tagline = "Portfolio";
+  try {
+    const s = await getSiteSettings();
+    name = s.site_name;
+    tagline = s.tagline;
+  } catch {
+  }
+  return {
+    title: { default: `${name} | Portfolio`, template: `%s | ${name}` },
+    description: tagline,
+  };
+}
 
 const themeScript = `
   try {
@@ -18,11 +31,17 @@ const themeScript = `
   } catch (e) {}
 `;
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  let css = "";
+  try {
+    css = accentCss((await getSiteSettings()).accent_color);
+  } catch {
+  }
+
   return (
     <html
       lang="en"
@@ -31,10 +50,9 @@ export default function RootLayout({
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        {css && <style>{css}</style>}
       </head>
-      <body className="min-h-screen antialiased">
-        {children}
-      </body>
+      <body className="min-h-screen antialiased">{children}</body>
     </html>
   );
 }

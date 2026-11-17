@@ -70,8 +70,7 @@ export default async function AdminSectionsPage() {
 
             <div className="w-28 text-right text-sm">
               {s.key === "hero" ? (
-                <span className="text-xs text-text-muted">Edit in Site settings</span>
-              ) : (
+<Link href="/admin/settings" className="hover:text-accent">Edit in settings</Link>              ) : (
                 <Link href={`/admin/sections/${s.id}/edit`} className="hover:text-accent">
                   Edit text
                 </Link>

@@ -33,7 +33,8 @@ export type Partner = {
   logo_url: string | null;
   website_url: string | null;
 };
-export async function getSiteSettings(): Promise<SiteSettings> {
+
+export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("site_settings")
@@ -42,7 +43,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     .single();
   if (error) throw new Error(`site_settings: ${error.message}`);
   return data;
-}
+});
 
 export const getSections = cache(async (): Promise<Section[]> => {
   const supabase = await createClient();

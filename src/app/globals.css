@@ -10,8 +10,8 @@
   --text-muted: #78b58f;
   --accent: #00ff41;
   --accent-fg: #00140a;
-  --glow: 0 0 18px rgb(0 255 65 / 0.5);
-  --grid: rgb(0 255 65 / 0.04);
+ --glow: 0 0 18px color-mix(in srgb, var(--accent) 50%, transparent);
+  --grid: color-mix(in srgb, var(--accent) 4%, transparent);
 
   /* ===== GitHub-style palette (Projects section ONLY) ===== */
   --gh-bg: #0d1117;
@@ -30,8 +30,8 @@
   --text-muted: #3f6b4f;
   --accent: #007a24;
   --accent-fg: #ffffff;
-  --glow: none;
-  --grid: rgb(0 122 36 / 0.06);
+    --glow: none;
+  --grid: color-mix(in srgb, var(--accent) 6%, transparent);
 
   --gh-bg: #ffffff;
   --gh-subtle: #f6f8fa;
