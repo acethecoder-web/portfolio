@@ -1,4 +1,4 @@
-// src/components/sections/ContactSection.tsx
+import { ContactForm } from "@/components/ContactForm";
 import type { Section } from "@/lib/data";
 import { SectionHeading } from "./SectionHeading";
 
@@ -10,9 +10,9 @@ export function ContactSection({ section }: { section: Section }) {
         <p className="max-w-md text-text-muted">
           {section.body ?? "Have a project in mind? Let's talk."}
         </p>
-        <p className="mt-6 font-mono text-xs text-text-muted">
-          The contact form arrives in a later phase.
-        </p>
+        <div className="mt-6">
+          <ContactForm />
+        </div>
       </div>
     </section>
   );

@@ -3,13 +3,14 @@ import { requireAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { UUID_RE } from "@/lib/validation";
 
-
 export type ArchivableTable =
   | "projects"
   | "testimonials"
   | "partners"
   | "tags"
-  | "project_images";
+  | "project_images"
+  | "contact_messages";
+
 export function refreshSite() {
   revalidatePath("/", "layout");
 }

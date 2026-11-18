@@ -27,12 +27,13 @@ export default async function AdminLayout({
             </Link>
             <Link href="/admin/sections" className="text-sm hover:text-accent">Sections</Link>
             <Link href="/admin/projects" className="text-sm hover:text-accent">
-  Projects
-</Link>
-<Link href="/admin/testimonials" className="text-sm hover:text-accent">Testimonials</Link>
-<Link href="/admin/partners" className="text-sm hover:text-accent">Partners</Link>
-<Link href="/admin/tags" className="text-sm hover:text-accent">Tags</Link>
-<Link href="/admin/settings" className="text-sm hover:text-accent">Settings</Link>
+            Projects
+            </Link>
+            <Link href="/admin/testimonials" className="text-sm hover:text-accent">Testimonials</Link>
+            <Link href="/admin/partners" className="text-sm hover:text-accent">Partners</Link>
+            <Link href="/admin/tags" className="text-sm hover:text-accent">Tags</Link>
+            <Link href="/admin/messages" className="text-sm hover:text-accent">Messages</Link>
+            <Link href="/admin/settings" className="text-sm hover:text-accent">Settings</Link>
             <Link href="/" className="text-sm text-text-muted hover:text-accent">
               View site ↗
             </Link>

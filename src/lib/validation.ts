@@ -3,8 +3,15 @@ export const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export type FormState =
-  | { error?: string; fields?: Record<string, string>; tagIds?: string[] }
+  | {
+      error?: string;
+      success?: boolean;
+      fields?: Record<string, string>;
+      tagIds?: string[];
+    }
   | undefined;
+
+export const CONTACT_EMAIL_RE = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
 export function slugify(text: string): string {
   return text
