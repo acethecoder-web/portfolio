@@ -27,14 +27,14 @@ export function PartnerForm({
           defaultValue={text("name", item?.name)} className={inputClass} />
       </Field>
 
-      <ImageUploadField
-  name="company_logo_url"
-  label="Company logo"
-  folder="logos"
-  maxSize={512}
-  defaultValue={text("company_logo_url", item?.company_logo_url ?? "")}
-  hint="Leave empty to show a letter badge."
-/>
+        <ImageUploadField
+          name="logo_url"
+          label="Logo"
+          folder="logos"
+          maxSize={512}
+          defaultValue={text("logo_url", item?.logo_url ?? "")}
+          hint="Leave empty to show a letter badge."
+        />
 
       <Field label="Website URL" htmlFor="website_url">
         <input id="website_url" name="website_url" type="url"
