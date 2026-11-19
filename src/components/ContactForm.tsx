@@ -1,12 +1,14 @@
+// src/components/ContactForm.tsx
 "use client";
 
-import { useActionState } from "react";
-import { Field, FormError, formValues, inputClass } from "@/components/admin/fields";
+import { useActionState, useState } from "react";
 import { sendMessage } from "@/app/(site)/contact/actions";
+import { Field, FormError, formValues, inputClass } from "@/components/admin/fields";
 
 export function ContactForm() {
   const [state, formAction, pending] = useActionState(sendMessage, undefined);
   const { text } = formValues(state);
+  const [startedAt] = useState(() => String(Date.now()));
 
   if (state?.success) {
     return (
@@ -22,6 +24,19 @@ export function ContactForm() {
   return (
     <form action={formAction} className="max-w-xl space-y-4">
       <FormError message={state?.error} />
+
+      {/* Honeypot: off-screen, skipped by keyboards and screen readers. Humans never fill it. */}
+      <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+        <label htmlFor="contact-website">Leave this field empty</label>
+        <input
+          id="contact-website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
+      <input type="hidden" name="started_at" value={startedAt} suppressHydrationWarning />
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Name" htmlFor="contact-name">
