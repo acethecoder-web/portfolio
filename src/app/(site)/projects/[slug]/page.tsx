@@ -4,19 +4,40 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/Container";
 import { Markdown } from "@/components/Markdown";
 import { Tag } from "@/components/Tag";
-import { getProject } from "@/lib/data";
+import { getProject , getSiteSettings } from "@/lib/data";
 import { safeUrl } from "@/lib/url";
 import { CloudImage } from "@/components/CloudImage";
 import { isStorageUrl } from "@/lib/storage";
 import { ProjectGallery } from "@/components/ProjectGallery";
+import {JsonLd} from "@/components/JsonLd";
+import { siteUrl } from "@/lib/site";
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const project = await getProject(slug);
-  if (!project) return { title: "Project not found" };
-  return { title: project.title, description: project.description };
+  if (!project) return { title: "Project not found", robots: { index: false } };
+
+  let siteName = "Portfolio";
+  try {
+    siteName = (await getSiteSettings()).site_name;
+  } catch {
+  }
+
+  const path = `/projects/${project.slug}`;
+  return {
+    title: project.title,
+    description: project.description,
+    alternates: { canonical: path },
+    openGraph: {
+      type: "website",
+      siteName,
+      title: project.title,
+      description: project.description,
+      url: path,
+    },
+  };
 }
 
 export default async function ProjectPage({ params }: Props) {
@@ -29,6 +50,19 @@ export default async function ProjectPage({ params }: Props) {
 
   return (
     <Container className="py-10">
+            <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "CreativeWork",
+          name: project.title,
+          description: project.description,
+          url: `${siteUrl()}/projects/${project.slug}`,
+          ...(isStorageUrl(project.cover_image_url) ? { image: project.cover_image_url } : {}),
+          ...(project.tags.length > 0
+            ? { keywords: project.tags.map((t) => t.label).join(", ") }
+            : {}),
+        }}
+      />
       <Link href="/projects" className="font-mono text-sm text-text-muted hover:text-accent">
         ← all projects
       </Link>

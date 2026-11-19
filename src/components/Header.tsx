@@ -1,4 +1,3 @@
-// src/components/Header.tsx
 import Link from "next/link";
 import { getSections , getSiteSettings   } from "@/lib/data";
 import { slugify } from "@/lib/validation";
@@ -21,7 +20,7 @@ export async function Header() {
         <Link href="/" className="font-mono text-sm font-bold text-accent">
         ~/{slugify(settings.site_name) || "home"}
       </Link>
-        <nav className="flex items-center gap-4 text-sm text-text-muted">
+        <nav aria-label="Main" className="flex items-center gap-4 text-sm text-text-muted">
           {links.map((s) => (
             <Link key={s.id} href={`/#${s.key}`} className="hover:text-accent">
               {NAV_LABELS[s.key]}

@@ -3,7 +3,11 @@ import { Container } from "@/components/Container";
 import { ProjectCard } from "@/components/ProjectCard";
 import { getProjects } from "@/lib/data";
 
-export const metadata = { title: "Projects" };
+export const metadata = {
+  title: "Projects",
+  description: "All published projects.",
+  alternates: { canonical: "/projects" },
+};
 
 export default async function ProjectsPage() {
   const projects = await getProjects();

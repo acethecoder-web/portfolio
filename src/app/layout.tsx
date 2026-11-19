@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { getSiteSettings } from "@/lib/data";
 import { accentCss } from "@/lib/theme";
+import { siteUrl } from "@/lib/site";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -18,8 +19,17 @@ export async function generateMetadata(): Promise<Metadata> {
   } catch {
   }
   return {
+    metadataBase: new URL(siteUrl()),
     title: { default: `${name} | Portfolio`, template: `%s | ${name}` },
     description: tagline,
+    openGraph: {
+      type: "website",
+      siteName: name,
+      title: `${name} | Portfolio`,
+      description: tagline,
+      locale: "en_US",
+    },
+    twitter: { card: "summary_large_image" },
   };
 }
 

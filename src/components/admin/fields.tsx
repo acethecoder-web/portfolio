@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { FormState } from "@/lib/validation";
 
 export const inputClass =
-  "mt-1 w-full rounded-md border border-border bg-bg px-3 py-2 text-sm outline-none focus:border-accent";
+  "mt-1 w-full rounded-md border border-border bg-bg px-3 py-2 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent/30";
 
 export function Field({
   label,

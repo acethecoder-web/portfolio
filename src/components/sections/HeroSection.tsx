@@ -1,4 +1,3 @@
-// src/components/sections/HeroSection.tsx
 import { CloudImage } from "@/components/CloudImage";
 import type { SiteSettings } from "@/lib/data";
 import { isStorageUrl } from "@/lib/storage";
@@ -37,6 +36,8 @@ export function HeroSection({ settings }: { settings: SiteSettings }) {
 
       {isStorageUrl(settings.avatar_url) && (
         <CloudImage
+          fetchPriority="high"
+          loading="eager"
           src={settings.avatar_url}
           alt={`${settings.site_name} portrait`}
           width={176}

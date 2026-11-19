@@ -173,3 +173,17 @@ images: row.project_images
   .map(({ id, image_url, alt_text }) => ({ id, image_url, alt_text })),    };
   }
 );
+
+export async function getPublishedProjectSlugs(): Promise<
+  { slug: string; created_at: string }[]
+> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("projects")
+    .select("slug, created_at")
+    .eq("is_published", true)
+    .is("archived_at", null)
+    .order("position");
+  if (error) throw new Error(`projects: ${error.message}`);
+  return (data ?? []) as { slug: string; created_at: string }[];
+}

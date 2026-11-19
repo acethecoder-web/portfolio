@@ -79,6 +79,13 @@ body {
   background-repeat: no-repeat, repeat, repeat;
 }
 
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
 /* Small custom classes */
 .glow-text {
   text-shadow: var(--glow);
@@ -97,7 +104,11 @@ body {
   html {
     scroll-behavior: auto;
   }
-  .cursor-blink {
-    animation: none;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

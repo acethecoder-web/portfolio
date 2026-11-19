@@ -10,7 +10,7 @@ export async function Footer() {
   });
 
   return (
-    <footer className="mt-20 border-t border-border">
+    <footer aria-label="Social links" className="mt-20 border-t border-border">
       <Container className="flex flex-wrap items-center justify-between gap-4 py-6 text-sm text-text-muted">
         <p>
           © {new Date().getFullYear()} {settings.site_name}
@@ -19,6 +19,7 @@ export async function Footer() {
           <ul className="flex flex-wrap gap-4">
             {links.map((l) => (
               <li key={l.label}>
+                {l.external && <span className="sr-only"> (opens in a new tab)</span>}
                 <a
                   href={l.href}
                   className="hover:text-accent"
